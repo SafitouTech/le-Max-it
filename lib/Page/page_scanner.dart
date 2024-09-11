@@ -215,6 +215,7 @@ class _PageScannerState extends State<PageScanner> {
     );
   }
 
+// controller le scanner en utilisant les données origines
   void _onQRViewCreated(QRViewController controller) {
     setState(() {
       _qrController = controller;
