@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:the_max_it/Page/sous_p_acceuil/s_s_page_drawer/conseiller.dart';
+import 'package:the_max_it/Page/sous_p_acceuil/the_statut.dart';
 
 const d_orange = Color(0xFFF36F05);
 const d_black1 = Color(0xFF090707);
@@ -8,7 +11,6 @@ const d_yellow = Color(0xFFFFE7A0);
 const d_mauve = Color(0xFFD68BE2);
 const d_white = Color(0xFFF5F9F8);
 const d_green = Color(0xFFD7EDDB);
-
 
 class PageAcceuil extends StatefulWidget {
   const PageAcceuil({super.key});
@@ -22,6 +24,14 @@ class _PageAcceuilState extends State<PageAcceuil> {
   bool isHidden = true;
   bool isHidden1 = true;
   bool isHidden2 = true;
+
+  late var fav; // Déclare la variable sans l'initialiser ici
+
+  @override
+  void initState() {
+    super.initState();
+    fav = Statut[0]; // Initialise 'fav' ici
+  }
 
   final List MesAchats = [
     {
@@ -109,18 +119,18 @@ class _PageAcceuilState extends State<PageAcceuil> {
       'name': 'Money',
     },
     {
-      'profile': 'images/prof3.png',
+  'profile': 'images/prof3.png',
       'name': 'Boutique',
     },
     {
       'profile': 'images/prof4.png',
       'name': 'Wido',
     },
-    {
+   {
       'profile': 'images/prof5.png',
       'name': 'Nouveautés',
     },
-  ];
+ ];
   final List Favoris =[
     {
       'image' : 'images/fav/iQR.png',
@@ -367,49 +377,62 @@ class _PageAcceuilState extends State<PageAcceuil> {
                 ),
 
                 //LA J APPEL MA LIST statut
-                SizedBox(
-                  height: 100,
-                  width: double.infinity,
-                  //color: d_mauve,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: Statut.map((fav) {
-                        return Container(
-                          child: Column(
-                            children: [
-                              //mes statuts
-                              Container(
-                                padding: const EdgeInsets.all(2),
-                                margin: const EdgeInsets.fromLTRB(3, 15, 17, 5),
-                                height: 55,
-                                width: 55,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  // borderRadius: BorderRadius.all(Radius.circular(30)),  c'est inutile
-                                  color: Colors.white,
-                                  border: Border.all(color: d_orange, width: 2, strokeAlign: 0),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      int index = Statut.indexOf(fav); // On trouve l'index du statut sélectionné
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TheStatut(selectedIndex: index), // Passer l'index du statut sélectionné
+                        ),
+                      );
+                    });
+                  },
+                  child:   SizedBox(
+                    height: 100,
+                    width: double.infinity,
+                    //color: d_mauve,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: Statut.map((fav) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                //mes statuts
+                                Container(
+                                  padding: const EdgeInsets.all(2),
+                                  margin: const EdgeInsets.fromLTRB(3, 15, 17, 5),
+                                  height: 55,
+                                  width: 55,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    // borderRadius: BorderRadius.all(Radius.circular(30)),  c'est inutile
+                                    color: Colors.white,
+                                    border: Border.all(color: d_orange, width: 2, strokeAlign: 0),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundImage: AssetImage(fav['profile']),
+                                    child: const ClipOval(),
+                                  ),
                                 ),
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: AssetImage(fav['profile']),
-                                  child: const ClipOval(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text(
+                                    fav['name'],
+                                    style: const TextStyle(
+                                        color: d_black1,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Text(
-                                  fav['name'],
-                                  style: const TextStyle(
-                                      color: d_black1,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
